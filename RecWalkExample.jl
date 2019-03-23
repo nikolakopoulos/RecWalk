@@ -31,7 +31,7 @@ println("Base Item Model:  HR = $(mean(HR))  ARHR=$(mean(RR))  NDCG=$(mean(NDCG)
 
 
 # RecWalk - K-Step
-K = 5
+K = 7
 @sync @parallel for user = 1:n
     ru  = sparse(reshape(P[user,:], 1, m+n))
     [ru  *= P for step=2:K]
@@ -40,7 +40,8 @@ end
 println("RecWalk K-Step:   HR = $(mean(HR))  ARHR=$(mean(RR))  NDCG=$(mean(NDCG))")
 
 # RecWalk - PR
-PI = inv(full(I-0.7*P)) # due to the small size of the example data the recwalk ppr vectors can be computed efficiently but with memory overhead
+eta = 0.7
+PI = inv(full(I-eta*P)) # due to the small size of the example data the recwalk ppr vectors can be computed in batch.
 PI = PI[1:n,n+1:end]
 @sync @parallel for user = 1:n
 	HR[user], RR[user], NDCG[user] = Single_HR_RR_NDCG(PI[user,:], vcat(Holdout[user], UW[:,user]), TopN)

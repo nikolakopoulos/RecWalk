@@ -14,5 +14,5 @@ For simplicity we also provide a split (target item per user alongside 99 random
 
 ## TODOS
 Resolve issues to make the code compatible with Julia 1 (coming soon). 
-Add a notebook with a more thorough example that includes other item models besides slim.  
+Add a notebook with a more thorough example that includes other item models besides SLIM.  
 

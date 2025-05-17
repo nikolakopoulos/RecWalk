@@ -1,6 +1,10 @@
+using SparseArrays
+using LinearAlgebra
+using DelimitedFiles
+
 function RecWalk(TrainSet, ItemModel, α=0.01)
     n,m = size(TrainSet)
-    Muu = speye(n)
+    Muu = spdiagm(0 => ones(n))
     Mii = RowStochastic(ItemModel,"dmax")
     Hui = RowStochastic(TrainSet)
     Hiu = RowStochastic(TrainSet')
@@ -28,10 +32,12 @@ function readItemModel(filename, m)
     A = readdlm(filename, skipblanks = false)
     A[A .== ""] = 0; A = Array{Float64}(A) 
     s1, s2 = size(A)
-    rows = []; cols = []; vals = Float64[];
+    rows = Int[]
+    cols = Int[]
+    vals = Float64[]
     for i = 1:s1
-        items = Array{Int64}(A[i,1:2:s2 - 1]) 
-        indx = find(items .> 0) 
+        items = Array{Int64}(A[i,1:2:s2 - 1])
+        indx = findall(items .> 0)
         items = items[indx]
         scores =  A[i,2 * indx] 
         append!(rows, i * ones(length(items)))

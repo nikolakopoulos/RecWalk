@@ -14,11 +14,11 @@ function RowStochastic(A, strategy="standard")
     if strategy == "dmax"
         row_sums = sum(A, 2)
         dmax = maximum(row_sums)
-        A_temp = 1 / dmax * A
-        return (I - spdiagm(vec(sum(A_temp, 2)))) + A_temp 
+        A_temp = (1.0 / dmax) * A
+        return (I - spdiagm(vec(sum(A_temp, 2)))) + A_temp
     else
         row_sums = sum(A, 2)
-        row_sums[sum(A, 2) .== 0] = 1 # replacing the zero row sums with 1
+        row_sums[row_sums .== 0] = 1 # replacing the zero row sums with 1
         return spdiagm(vec(1 ./ row_sums)) * A
     end
 
